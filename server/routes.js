@@ -8,7 +8,8 @@ var path = require('path');
 var stormpath = require('express-stormpath');
 var stormpathExpressSdk = require('stormpath-sdk-express');
 var spMiddleware = stormpathExpressSdk.createMiddleware({
-	allowedOrigins: ['http://192.168.0.16:8100']
+	allowedOrigins: ['http://192.168.0.16:8100'],
+	xsrf: false
 });
 /*var spConfig = {
   appHref: process.env['STORMPATH_APP_HREF'],
@@ -22,8 +23,7 @@ module.exports = function(app) {
 	spMiddleware.attachDefaults(app);
 	
 	// Insert API routes below
-	//app.use('/update', require('./api/user')(app));
-	app.post('/changePassword', spMiddleware.authenticate, require('./api/auth')(app));
+	app.post('/changePassword', spMiddleware.authenticate, require('./api/auth')());
 	app.use('/api/quotes', spMiddleware.authenticate, require('./api/quote')(app));
 	app.use('/api/bgs', spMiddleware.authenticate, require('./api/bg')(app));
 };
